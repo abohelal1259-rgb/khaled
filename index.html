@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حكايتنا ❤️ - خالد & نور</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-burgundy: #2c0b14;
+            --bg-wine: #4a1525;
+            --glass-bg: rgba(74, 21, 37, 0.45);
+            --glass-border: rgba(255, 182, 193, 0.2);
+            --text-main: #fff0f3;
+            --text-secondary: #ffb3c1;
+            --accent-pink: #ff4d6d;
+            --accent-glow: rgba(255, 77, 109, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-burgundy);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(74, 21, 37, 0.8) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(92, 15, 38, 0.6) 0%, transparent 50%),
+                linear-gradient(135deg, #1f050d 0%, #2c0b14 50%, #3d101e 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: rgba(255, 105, 180, 0.3);
+            animation: floatUp linear infinite;
+            bottom: -50px;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg) scale(0.6); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(-105vh) rotate(360deg) scale(1.2); opacity: 0; }
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        #welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(31, 5, 13, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #welcome-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .envelope-wrapper {
+            text-align: center;
+            cursor: pointer;
+            padding: 40px;
+            max-width: 450px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: pulseGlow 3s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 20px rgba(255, 77, 109, 0.2); }
+            100% { box-shadow: 0 0 40px rgba(255, 77, 109, 0.5); }
+        }
+
+        .envelope {
+            width: 180px;
+            height: 120px;
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+            margin: 0 auto 30px;
+            position: relative;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 90px solid transparent;
+            border-right: 90px solid transparent;
+            border-top: 70px solid #ff5c8a;
+            transform-origin: top;
+            transition: transform 0.6s ease;
+        }
+
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 10;
+        }
+
+        .envelope-heart {
+            position: absolute;
+            top: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 35px;
+            z-index: 11;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
+            animation: heartbeat 1.2s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.15); }
+        }
+
+        .envelope-wrapper h2 {
+            font-family: 'Amiri', serif;
+            font-size: 28px;
+            color: var(--text-main);
+            margin-bottom: 10px;
+        }
+
+        .envelope-wrapper p {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+
+        .open-btn {
+            background: linear-gradient(135deg, #ff4d6d 0%, #c9184a 100%);
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(255, 77, 109, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Amiri', serif;
+            font-size: 36px;
+            color: var(--text-main);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 35px;
+        }
+
+        .story-section {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .time-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 18px 10px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .time-value {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--accent-pink);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .time-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .music-section {
+            padding: 25px;
+            text-align: center;
+            border: 2px solid rgba(255, 77, 109, 0.4);
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            margin-top: 15px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 16px;
+        }
+
+        .promises-grid, .messages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .promise-card, .secret-card {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .promise-icon, .secret-icon {
+            font-size: 38px;
+            color: var(--accent-pink);
+            margin-bottom: 15px;
+        }
+
+        .secret-card {
+            cursor: pointer;
+        }
+
+        .secret-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, opacity 0.5s ease;
+            opacity: 0;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .secret-card.active .secret-content {
+            max-height: 200px;
+            opacity: 1;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            height: 340px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: transform 0.4s ease;
+            background: rgba(20, 4, 9, 0.55);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-8px);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.03);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 25px 20px 20px;
+            background: linear-gradient(to top, rgba(31,5,13,0.95) 0%, transparent 100%);
+            text-align: center;
+            color: var(--text-main);
+            font-size: 17px;
+            font-family: 'Amiri', serif;
+        }
+
+        .final-section {
+            padding: 50px 30px;
+            text-align: center;
+        }
+
+        .final-heart-icon {
+            font-size: 50px;
+            color: var(--accent-pink);
+            margin-bottom: 20px;
+            animation: heartbeat 1.2s infinite;
+        }
+
+        .final-message-box {
+            font-size: 18px;
+            line-height: 1.9;
+            max-width: 700px;
+            margin: 25px auto;
+            font-family: 'Amiri', serif;
+        }
+
+        .restart-btn {
+            margin-top: 30px;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--glass-border);
+            padding: 10px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hearts-container" id="hearts-container"></div>
+
+    <div id="welcome-screen">
+        <div class="envelope-wrapper glass-card" onclick="openEnvelope()">
+            <div class="envelope" id="envelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-heart"><i class="fas fa-heart"></i></div>
+            </div>
+            <h2>رسالة حب خاصة</h2>
+            <p>خالد & نور ❤️</p>
+            <button class="open-btn">افتحي الجواب</button>
+        </div>
+    </div>
+
+    <div class="main-container">
+
+        <section class="glass-card story-section">
+            <h2 class="section-title"><i class="fas fa-heart" style="color:var(--accent-pink)"></i> حكايتنا ❤️</h2>
+            <p class="section-subtitle">من 2023 ووقتي كله بيحلى بوجودك.. كل ثانية بتمر بتثبت إنك أجمل حاجة حصلتلي يا نور</p>
+            
+            <div class="countdown-grid">
+                <div class="time-box"><span class="time-value" id="years">0</span><span class="time-label">سنوات</span></div>
+                <div class="time-box"><span class="time-value" id="months">0</span><span class="time-label">شهور</span></div>
+                <div class="time-box"><span class="time-value" id="days">0</span><span class="time-label">أيام</span></div>
+                <div class="time-box"><span class="time-value" id="hours">0</span><span class="time-label">ساعات</span></div>
+                <div class="time-box"><span class="time-value" id="minutes">0</span><span class="time-label">دقائق</span></div>
+                <div class="time-box"><span class="time-value" id="seconds">0</span><span class="time-label">ثواني</span></div>
+            </div>
+        </section>
+
+        <section class="glass-card music-section">
+            <div class="music-text">
+                <h3 style="font-family: 'Amiri', serif; font-size: 24px; color: var(--text-main); margin-bottom: 5px;">عمرو دياب - حكايات 🎵</h3>
+                <p style="color: var(--text-secondary); font-size: 15px;">أنساك لا يا حبيبي طول ما إنت في قلبي ❤️</p>
+            </div>
+            <div class="video-container">
+                <div id="yt-player"></div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">ذكرياتنا الجميلة 📸</h2>
+            <p class="section-subtitle">صور بتحكي سنين من المحبة والونس.. وكل نظرة وضحكة فيها ليها مكان في قلبي يا نور</p>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item glass-card">
+                    <img src="https://i.ibb.co/Gb9B3S3/Whats-App-Image-2026-11-22-at-1-36-41-AM-2.jpg" alt="نظرة وذكرى" loading="lazy">
+                    <div class="gallery-overlay">النظرة دي لوحدها بتفكرني ليه حبيت وجودك من أول لحظة ✨</div>
+                </div>
+
+                <div class="gallery-item glass-card">
+                    <img src="https://i.ibb.co/JFMwbxv4/Whats-App-Image-2026-11-22-at-1-36-41-AM.jpg" alt="لحظة قريبة" loading="lazy">
+                    <div class="gallery-overlay">قربك راحة واطمئنان.. ووجودك جنبي بيخلي أي وقت أسهل ♾️</div>
+                </div>
+
+                <div class="gallery-item glass-card">
+                    <img src="https://i.ibb.co/rKZhMdVX/Whats-App-Image-2026-11-22-at-1-36-42-AM.jpg" alt="ذكرى من السنين" loading="lazy">
+                    <div class="gallery-overlay">من 2023 وإحنا بنجمع تفاصيل حلوة ما بتتنسيش أبداً ❤️</div>
+                </div>
+
+                <div class="gallery-item glass-card">
+                    <img src="https://i.ibb.co/23rKL3GK/Whats-App-Image-2026-11-22-at-1-36-41-AM-1.jpg" alt="تفصيل غالي" loading="lazy">
+                    <div class="gallery-overlay">كل صورة معاكي حكاية صغيرة بتكبر جوه قلبي كل يوم ❤️</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">وعود من القلب ✨</h2>
+            <p class="section-subtitle">المدة اللي فاتت كانت بداية.. واللي جاي بإذن الله أجمل وأثبت</p>
+            
+            <div class="promises-grid">
+                <div class="glass-card promise-card">
+                    <div class="promise-icon"><i class="fas fa-infinity"></i></div>
+                    <h3>حبنا اللي بدأ من 2023 هيفضل يكبر وما يقلش مع الوقت أبداً.</h3>
+                </div>
+                <div class="glass-card promise-card">
+                    <div class="promise-icon"><i class="fas fa-shield-heart"></i></div>
+                    <h3>هكون دايماً أمانك وضحكتك في كل يوم وفي كل ظرف.</h3>
+                </div>
+                <div class="glass-card promise-card">
+                    <div class="promise-icon"><i class="fas fa-hands-holding-child"></i></div>
+                    <h3>هفضل سندك وضهرك في كل خطوة وكل سنيننا الجاية.</h3>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">رسائل من العشق 💌</h2>
+            <p class="section-subtitle">اضغطي على البطاقات لتفتحي رسائلك الخاصة</p>
+            
+            <div class="messages-grid">
+                <div class="glass-card secret-card" onclick="toggleSecret(this)">
+                    <div class="secret-icon"><i class="fas fa-crown"></i></div>
+                    <h3>تاج قلبي</h3>
+                    <div class="secret-content">مع مرور الوقت والسنين، مكانك في قلبي بيزيد ويثبت أكتر وأكتر يا نور.</div>
+                </div>
+
+                <div class="glass-card secret-card" onclick="toggleSecret(this)">
+                    <div class="secret-icon"><i class="fas fa-star"></i></div>
+                    <h3>نور أيامي</h3>
+                    <div class="secret-content">اسمك على مسماه.. وجودك هو النور اللي بيطمن روحي ويهون أي تعب.</div>
+                </div>
+
+                <div class="glass-card secret-card" onclick="toggleSecret(this)">
+                    <div class="secret-icon"><i class="fas fa-envelope-open-text"></i></div>
+                    <h3>حكايتنا</h3>
+                    <div class="secret-content">أجمل حكاية كتبتها الأيام إنك بقيتي رفيقة قلبي وسبب فرحتي من 2023 لحد النهاردة.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card final-section">
+            <div class="final-heart-icon"><i class="fas fa-heart"></i></div>
+            <h2 class="section-title" style="justify-content:center;">ملكة قلبي</h2>
+            <div class="final-message-box">
+                "إلى رفيقة عمري، وتوأم روحي، وسبب سعادتي الدائمة <strong>نور</strong>..<br>
+                من 2023 والوقت معاكي ليه طعم تاني، وكل يوم بيعدي بيزود حبي ليكي أكتر.<br>
+                أنتِ مش بس حبيبتي، أنتِ بيتي وأماني وكل دنيتي."
+            </div>
+            <h3 style="color:var(--accent-pink); margin-top:20px;">بحبك يا حبيبتي.. للأبد ❤️<br><span style="font-size:16px; color:var(--text-secondary);">خالد</span></h3>
+            <button class="restart-btn" onclick="resetExperience()">إعادة فتح الرسالة 💌</button>
+        </section>
+
+    </div>
+
+    <script>
+        const CONFIG = {
+            startDate: new Date("2023-01-01T00:00:00")
+        };
+
+        let ytPlayer;
+        let isPlayerReady = false;
+        let shouldPlayOnReady = false;
+
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        document.body.appendChild(tag);
+
+        function onYouTubeIframeAPIReady() {
+            ytPlayer = new YT.Player('yt-player', {
+                videoId: 'X3YyIELz434',
+                playerVars: {
+                    autoplay: 0,
+                    rel: 0,
+                    playsinline: 1
+                },
+                events: {
+                    'onReady': () => {
+                        isPlayerReady = true;
+                        if (shouldPlayOnReady) {
+                            ytPlayer.playVideo();
+                        }
+                    }
+                }
+            });
+        }
+
+        function startSong() {
+            shouldPlayOnReady = true;
+            if (isPlayerReady && ytPlayer && typeof ytPlayer.playVideo === 'function') {
+                ytPlayer.playVideo();
+            }
+        }
+
+        function openEnvelope() {
+            document.getElementById('envelope').classList.add('open');
+            startSong();
+            setTimeout(() => {
+                document.getElementById('welcome-screen').classList.add('hidden');
+            }, 700);
+        }
+
+        function resetExperience() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(() => {
+                document.getElementById('envelope').classList.remove('open');
+                document.getElementById('welcome-screen').classList.remove('hidden');
+            }, 500);
+        }
+
+        const heartsContainer = document.getElementById('hearts-container');
+        const heartSymbols = ['❤️', '💖', '✨', '💗'];
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+            const duration = Math.random() * 6 + 6;
+            heart.style.animationDuration = duration + 's';
+            heartsContainer.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, duration * 1000);
+        }
+        setInterval(createHeart, 500);
+
+        function updateCountdown() {
+            const now = new Date();
+            const diff = now - CONFIG.startDate;
+            if (diff < 0) return;
+
+            const seconds = Math.floor(diff / 1000) % 60;
+            const minutes = Math.floor(diff / (1000 * 60)) % 60;
+            const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
+            
+            let years = now.getFullYear() - CONFIG.startDate.getFullYear();
+            let months = now.getMonth() - CONFIG.startDate.getMonth();
+            let days = now.getDate() - CONFIG.startDate.getDate();
+
+            if (days < 0) {
+                months--;
+                const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+                days += prevMonth.getDate();
+            }
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            document.getElementById('years').innerText = years;
+            document.getElementById('months').innerText = months;
+            document.getElementById('days').innerText = days;
+            document.getElementById('hours').innerText = hours;
+            document.getElementById('minutes').innerText = minutes;
+            document.getElementById('seconds').innerText = seconds;
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        function toggleSecret(card) {
+            const wasActive = card.classList.contains('active');
+            document.querySelectorAll('.secret-card').forEach(c => c.classList.remove('active'));
+            if (!wasActive) card.classList.add('active');
+        }
+    </script>
+</body>
+</html>
